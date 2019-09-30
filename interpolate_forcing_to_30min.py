@@ -141,9 +141,8 @@ def interpolate_forcing(fpath, var, output_dir, years=None):
 
 if __name__ == "__main__":
 
-    #years = np.arange(1995, 2010+1)
-    years = np.arange(2000, 2001) # Test one year
-    #years = np.arange(1995, 1996 + 1) # Test two year
+    years = np.arange(1995, 2010+1)
+    #years = np.arange(2000, 2001) # Test one year
 
     (sysname, nodename, release, version, machine) = os.uname()
     if "Mac" in nodename or "imac" in nodename:
