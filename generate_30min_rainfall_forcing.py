@@ -49,6 +49,6 @@ if __name__ == "__main__":
     fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
 
     #years = np.arange(1995, 2010+1)
-    years = np.arange(1996, 2010+1)
+    years = np.arange(1997, 2010+1)
     for year in years:
         main(fpath, year)
