@@ -23,7 +23,7 @@ def main(fpath, year):
     # Repeat rainfall data and then divide by increased number of timesteps so
     # to maintain the same rainfall
     new_rain = np.repeat(rain, 6, axis=0)
-    new_rain /= 6.0
+    new_rain = np.where(new_rain > 0.0001, new_rain / 6.0, 0.0)
 
     # Generate new time sequence
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
