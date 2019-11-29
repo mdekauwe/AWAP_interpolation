@@ -21,7 +21,7 @@ def main(fpath, year):
     rain = ds.Rainf
 
     # Repeat rainfall data and then divide by increased number of timesteps so
-    # to maintain the same rainfall 
+    # to maintain the same rainfall
     new_rain = np.repeat(rain, 6, axis=0)
     new_rain /= 6.0
 
@@ -43,6 +43,6 @@ if __name__ == "__main__":
         raise TypeError("Expecting year name to be supplied on cmd line!")
 
     year = sys.argv[1]
-    fpath = "/short/w35/mm3972/data/AWAP_to_netcdf"
+    fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
 
     main(fpath, year)
