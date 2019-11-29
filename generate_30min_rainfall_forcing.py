@@ -42,7 +42,7 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         raise TypeError("Expecting year name to be supplied on cmd line!")
 
-    year = sys.argv[1]
+    year = int(sys.argv[1])
     fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
 
     main(fpath, year)
