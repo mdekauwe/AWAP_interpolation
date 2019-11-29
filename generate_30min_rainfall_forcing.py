@@ -16,6 +16,8 @@ import pandas as pd
 
 def main(fpath, year):
 
+    print(year)
+
     fname = "%s/AWAP.Rainf.3hr.%d.nc" % (fpath, year)
     ds = xr.open_dataset(fname)
     rain = ds.Rainf
