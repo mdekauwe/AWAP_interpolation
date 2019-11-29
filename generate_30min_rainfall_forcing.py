@@ -32,6 +32,10 @@ def main(fpath, year):
 
     # Create new 30 min rainfall data
     new_rain['time'] = dates
+    new_rain.attrs['units'] = 'kg m-2 s-1'
+    new_rain.attrs['standard_name'] = "rainfall_flux"
+    new_rain.attrs['long_name'] = "Rainfall rate"
+
     ofname = "awap_30min_rain/AWAP.Rainf.3hr.%d.nc" % (year)
     new_rain.to_netcdf(ofname)
 
