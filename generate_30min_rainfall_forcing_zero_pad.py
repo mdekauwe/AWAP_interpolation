@@ -92,8 +92,14 @@ if __name__ == "__main__":
     #years = np.arange(1995, 2010+1)
     years = np.arange(st_year, en_year+1)
 
-    print(years)
-    sys.exit()
     for year in years:
         main(fpath, year)
     #"""
+
+    """
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 1995 1997  &
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 1998 2000  &
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 2001 2003  &
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 2004 2006  &
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 2007 2010  &
+    """
