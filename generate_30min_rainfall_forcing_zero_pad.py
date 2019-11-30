@@ -29,8 +29,9 @@ def main(fpath, year):
     time = (time * 6)
     out = np.zeros((time, nrows, ncols))
 
-    nrows = 5
-    ncols = 5
+    # testing
+    #nrows = 5
+    #ncols = 5
 
     for r in range(nrows):
         print(r,nrows)
@@ -65,7 +66,6 @@ def main(fpath, year):
     ds_out.attrs['long_name'] = "Rainfall rate"
     ds_out.attrs['_fillvalue'] = -999.0
     ds_out.attrs['alma_name'] = "Rainf"
-
 
     ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
     ds_out.to_netcdf(ofname)
