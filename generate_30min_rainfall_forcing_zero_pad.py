@@ -73,14 +73,15 @@ def main(fpath, year):
 
 if __name__ == "__main__":
 
-    """
+
     # Expecting var to be supplied on cmd line, e.g.
     # $ python generate_30min_rainfall_forcing.py 1995
     if len(sys.argv) < 2:
         raise TypeError("Expecting year name to be supplied on cmd line!")
 
-    year = int(sys.argv[1])
-    """
+    st_year = int(sys.argv[1])
+    en_year = int(sys.argv[2])
+
 
     fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
     #fpath = "../"
@@ -88,9 +89,11 @@ if __name__ == "__main__":
     #main(fpath, year)
 
     #"""
-    years = np.arange(1995, 2010+1)
-    #years = np.arange(1995, 1995+1)
+    #years = np.arange(1995, 2010+1)
+    years = np.arange(st_year, en_year+1)
 
+    print(years)
+    sys.exit()
     for year in years:
         main(fpath, year)
     #"""
