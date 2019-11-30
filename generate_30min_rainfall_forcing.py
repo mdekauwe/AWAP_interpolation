@@ -40,7 +40,8 @@ def main(fpath, year):
     # to maintain the same rainfall total, but spread over 48 time slots. This
     # will mean smaller, more frequent events though
     # Need to keep areas that were NaN, i.e. sea, don't divde by these
-    new_rain = xr.where(~np.isnan(new_rain), new_rain / 6.0,  new_rain)
+    new_rain = xr.where(np.logical_and(~np.isnan(new_rain), new_rain > 0.0),
+                        new_rain / 6.0,  new_rain)
 
     new_rain.attrs['units'] = 'kg m-2 s-1'
     new_rain.attrs['standard_name'] = "rainfall_flux"
