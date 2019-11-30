@@ -66,7 +66,7 @@ def main(fpath, year):
     new_rain.attrs['standard_name'] = "rainfall_flux"
     new_rain.attrs['long_name'] = "Rainfall rate"
 
-    ofname = "awap_30min_rain/AWAP.Rainf.3hr.%d.nc" % (year)
+    ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
     new_rain.to_netcdf(ofname)
 
 if __name__ == "__main__":
