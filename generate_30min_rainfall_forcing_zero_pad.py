@@ -34,7 +34,7 @@ def main(fpath, year):
     #ncols = 5
 
     for r in range(nrows):
-        print(r,nrows)
+        #print(r,nrows)
         for c in range(ncols):
             vals = rain[:,r,c].values
             six_count = 0
@@ -72,25 +72,24 @@ def main(fpath, year):
 
 if __name__ == "__main__":
 
-    #"""
+    """
     # Expecting var to be supplied on cmd line, e.g.
     # $ python generate_30min_rainfall_forcing.py 1995
     if len(sys.argv) < 2:
         raise TypeError("Expecting year name to be supplied on cmd line!")
 
     year = int(sys.argv[1])
-    #"""
+    """
 
     fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
     #fpath = "../"
 
-    main(fpath, year)
+    #main(fpath, year)
 
-    """
-    #years = np.arange(1995, 2010+1)
-
-    years = np.arange(1995, 1995+1)
+    #"""
+    years = np.arange(1996, 2010+1)
+    #years = np.arange(1995, 1995+1)
 
     for year in years:
         main(fpath, year)
-    """
+    #"""
