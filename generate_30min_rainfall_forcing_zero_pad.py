@@ -27,7 +27,7 @@ def main(fpath, year):
     time, nrows, ncols = rain.shape
     __, lat, lon = rain.shape
     time = (time * 6)
-    out = np.zeros((time, nrows, ncols))
+    out = np.zeros((time, nrows, ncols), dtype=np.float32)
 
     # testing
     #nrows = 5
@@ -52,13 +52,14 @@ def main(fpath, year):
                     six_count = 0
                 six_count += 1
 
+
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
                           periods=time,
                           freq="30min")
-
+                          
     ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
-    ds_out['lat'] = rain['lat']
-    ds_out['lon'] = rain['lon']
+    ds_out['lat'] = rain['lat'].astype(np.float32)
+    ds_out['lon'] = rain['lon'].astype(np.float32)
     ds_out['time'] = dates
     ds_out['Rainf'] = xr.DataArray(out, dims=['time', 'lat', 'lon'])
     ds_out.attrs['units'] = 'kg m-2 s-1'
