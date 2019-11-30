@@ -22,6 +22,30 @@ def main(fpath, year):
     ds = xr.open_dataset(fname)
     rain = ds.Rainf
 
+    time, nrows, ncols = rain.shape
+    time = (time * 6)
+    out = np.zeros((time, nrows, ncols))
+
+    for r in range(nrows):
+        print(r,nrows)
+        for c in range(ncols):
+            vals = rain[:,r,c].values
+            six_count = 0
+            cnt = 0
+
+            if np.any(vals < -500.0):
+                out[:,r,c] = -999.0
+            else:
+                out[:,r,c] = 0.0
+
+            for t in range(time):
+                if six_count == 6:
+                    out[t,r,c] = vals[cnt]
+                    cnt += 1
+                    six_count = 0
+                six_count += 1
+
+
     # Repeat rainfall data and then divide by increased number of timesteps so
     # to maintain the same rainfall total, but spread over 48 time slots. This
     # will mean smaller, more frequent events though
@@ -36,11 +60,7 @@ def main(fpath, year):
     # Create new 30 min rainfall data
     new_rain['time'] = dates
 
-    # Repeat rainfall data and then divide by increased number of timesteps so
-    # to maintain the same rainfall total, but spread over 48 time slots. This
-    # will mean smaller, more frequent events though
-    # Need to keep areas that were NaN, i.e. sea, don't divde by these
-    new_rain = xr.where(~np.isnan(new_rain), new_rain / 6.0,  new_rain)
+    new_rain['Rainf'] = out
 
     new_rain.attrs['units'] = 'kg m-2 s-1'
     new_rain.attrs['standard_name'] = "rainfall_flux"
@@ -51,20 +71,23 @@ def main(fpath, year):
 
 if __name__ == "__main__":
 
-    """
+    #"""
     # Expecting var to be supplied on cmd line, e.g.
     # $ python generate_30min_rainfall_forcing.py 1995
     if len(sys.argv) < 2:
         raise TypeError("Expecting year name to be supplied on cmd line!")
 
     year = int(sys.argv[1])
-    """
+    #"""
 
     fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
     #fpath = "../"
 
+    main(fpath, year)
+
+    """
     years = np.arange(1995, 2010+1)
-    #years = np.arange(1997, 2010+1)
 
     for year in years:
         main(fpath, year)
+    """
