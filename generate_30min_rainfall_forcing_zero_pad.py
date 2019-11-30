@@ -56,7 +56,7 @@ def main(fpath, year):
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
                           periods=time,
                           freq="30min")
-                          
+
     ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
     ds_out['lat'] = rain['lat'].astype(np.float32)
     ds_out['lon'] = rain['lon'].astype(np.float32)
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     #main(fpath, year)
 
     #"""
-    years = np.arange(1996, 2010+1)
+    years = np.arange(1995, 2010+1)
     #years = np.arange(1995, 1995+1)
 
     for year in years:
