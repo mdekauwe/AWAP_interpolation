@@ -22,9 +22,15 @@ def main(fpath, year):
     ds = xr.open_dataset(fname)
     rain = ds.Rainf
 
+    tmp = rain.copy()
+
     time, nrows, ncols = rain.shape
+    __, lat, lon = rain.shape
     time = (time * 6)
     out = np.zeros((time, nrows, ncols))
+
+    nrows = 5
+    ncols = 5
 
     for r in range(nrows):
         print(r,nrows)
@@ -45,50 +51,46 @@ def main(fpath, year):
                     six_count = 0
                 six_count += 1
 
-
-    # Repeat rainfall data and then divide by increased number of timesteps so
-    # to maintain the same rainfall total, but spread over 48 time slots. This
-    # will mean smaller, more frequent events though
-    new_rain = np.repeat(rain, 6, axis=0)
-
-    # Generate new time sequence
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
-                          periods=len(new_rain),
+                          periods=time,
                           freq="30min")
 
+    ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
+    ds_out['lat'] = rain['lat']
+    ds_out['lon'] = rain['lon']
+    ds_out['time'] = dates
+    ds_out['Rainf'] = xr.DataArray(out, dims=['time', 'lat', 'lon'])
+    ds_out.attrs['units'] = 'kg m-2 s-1'
+    ds_out.attrs['standard_name'] = "rainfall_flux"
+    ds_out.attrs['long_name'] = "Rainfall rate"
+    ds_out.attrs['_fillvalue'] = -999.0
+    ds_out.attrs['alma_name'] = "Rainf"
 
-    # Create new 30 min rainfall data
-    new_rain['time'] = dates
-
-    new_rain['Rainf'] = out
-
-    new_rain.attrs['units'] = 'kg m-2 s-1'
-    new_rain.attrs['standard_name'] = "rainfall_flux"
-    new_rain.attrs['long_name'] = "Rainfall rate"
 
     ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
-    new_rain.to_netcdf(ofname)
+    ds_out.to_netcdf(ofname)
 
 if __name__ == "__main__":
 
-    """
+    #"""
     # Expecting var to be supplied on cmd line, e.g.
     # $ python generate_30min_rainfall_forcing.py 1995
     if len(sys.argv) < 2:
         raise TypeError("Expecting year name to be supplied on cmd line!")
 
     year = int(sys.argv[1])
+    #"""
+
+    #fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
+    fpath = "../"
+
+    main(fpath, year)
+
     """
-
-    fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
-    #fpath = "../"
-
-    #main(fpath, year)
-
-
     #years = np.arange(1995, 2010+1)
 
     years = np.arange(1995, 1995+1)
 
     for year in years:
         main(fpath, year)
+    """
