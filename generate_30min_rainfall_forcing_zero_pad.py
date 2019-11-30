@@ -81,8 +81,8 @@ if __name__ == "__main__":
     year = int(sys.argv[1])
     #"""
 
-    #fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
-    fpath = "../"
+    fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
+    #fpath = "../"
 
     main(fpath, year)
 
