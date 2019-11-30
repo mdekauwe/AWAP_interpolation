@@ -86,8 +86,9 @@ if __name__ == "__main__":
     #main(fpath, year)
 
 
-    years = np.arange(1995, 2010+1)
+    #years = np.arange(1995, 2010+1)
+
+    years = np.arange(1995, 1995+1)
 
     for year in years:
         main(fpath, year)
-    
