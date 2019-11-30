@@ -22,6 +22,7 @@ def main(fpath, year):
     ds = xr.open_dataset(fname)
     rain = ds.Rainf
 
+    out = np.zeros(
     # Repeat rainfall data and then divide by increased number of timesteps so
     # to maintain the same rainfall total, but spread over 48 time slots. This
     # will mean smaller, more frequent events though
@@ -36,14 +37,11 @@ def main(fpath, year):
     # Create new 30 min rainfall data
     new_rain['time'] = dates
 
-    temp = new_rain.values
-
     # Repeat rainfall data and then divide by increased number of timesteps so
     # to maintain the same rainfall total, but spread over 48 time slots. This
     # will mean smaller, more frequent events though
     # Need to keep areas that were NaN, i.e. sea, don't divde by these
-    temp = np.where(~np.isnan(temp), temp / 6.0, temp)
-    new_rain['Rainf'] = temp
+    new_rain = xr.where(~np.isnan(new_rain), new_rain / 6.0,  new_rain)
 
     new_rain.attrs['units'] = 'kg m-2 s-1'
     new_rain.attrs['standard_name'] = "rainfall_flux"
