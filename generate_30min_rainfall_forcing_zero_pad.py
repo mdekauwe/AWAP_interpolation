@@ -38,10 +38,10 @@ def main(fpath, year):
             six_count = 0
             cnt = 0
 
+            # Fill all time slices with missing value, otherwise values would
+            # have been changed to zero
             if np.any(vals < -500.0):
                 out[:,r,c] = -999.0
-            else:
-                out[:,r,c] = 0.0
 
             for t in range(time):
                 if six_count == 6:
@@ -60,11 +60,11 @@ def main(fpath, year):
     ds_out['lon'] = rain['lon'].astype(np.float32)
     ds_out['time'] = dates
     ds_out['Rainf'] = xr.DataArray(out, dims=['time', 'lat', 'lon'])
-    ds_out.attrs['units'] = 'kg m-2 s-1'
-    ds_out.attrs['standard_name'] = "rainfall_flux"
-    ds_out.attrs['long_name'] = "Rainfall rate"
-    ds_out.attrs['_fillvalue'] = -999.0
-    ds_out.attrs['alma_name'] = "Rainf"
+    ds_out['Rainf'].attrs['units'] = 'kg m-2 s-1'
+    ds_out['Rainf'].attrs['standard_name'] = "rainfall_flux"
+    ds_out['Rainf'].attrs['long_name'] = "Rainfall rate"
+    ds_out['Rainf'].attrs['_fillvalue'] = -999.0
+    ds_out['Rainf'].attrs['alma_name'] = "Rainf"
 
     ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
     ds_out.to_netcdf(ofname)
