@@ -45,7 +45,7 @@ def main(fpath, year):
 
             # Fill all time slices with missing value, otherwise values would
             # have been changed to zero
-            if np.any(vals < -500.0):
+            if np.all(vals < -500.0):
                 out[:,r,c] = -999.0
 
             for t in range(time):
