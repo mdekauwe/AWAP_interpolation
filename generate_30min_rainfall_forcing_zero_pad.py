@@ -22,6 +22,9 @@ def main(fpath, year):
     ds = xr.open_dataset(fname)
     rain = ds.Rainf
 
+    # Generate output rain field that is six times as long and pad new timesteps
+    # with zeros, i.e. go from 3 hourly to 30 min rainfall data with no change
+    # in timing of rainfall or amount.
     time, nrows, ncols = rain.shape
     __, lat, lon = rain.shape
     time = (time * 6)
@@ -49,7 +52,6 @@ def main(fpath, year):
                     cnt += 1
                     six_count = 0
                 six_count += 1
-
 
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
                           periods=time,
