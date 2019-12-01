@@ -22,8 +22,6 @@ def main(fpath, year):
     ds = xr.open_dataset(fname)
     rain = ds.Rainf
 
-    tmp = rain.copy()
-
     time, nrows, ncols = rain.shape
     __, lat, lon = rain.shape
     time = (time * 6)
