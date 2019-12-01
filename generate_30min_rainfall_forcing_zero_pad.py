@@ -75,15 +75,23 @@ def main(fpath, year):
 
 if __name__ == "__main__":
 
+    """
+    Run like this...
+
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 1995 1997 &
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 1998 2000 &
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 2001 2003 &
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 2004 2006 &
+    nohup ./generate_30min_rainfall_forcing_zero_pad.py 2007 2010 &
+    """
 
     # Expecting var to be supplied on cmd line, e.g.
-    # $ python generate_30min_rainfall_forcing.py 1995
+    # $ python generate_30min_rainfall_forcing_zero_pad.py 1995
     if len(sys.argv) < 2:
         raise TypeError("Expecting year name to be supplied on cmd line!")
 
     st_year = int(sys.argv[1])
     en_year = int(sys.argv[2])
-
 
     fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
     #fpath = "../"
@@ -97,11 +105,3 @@ if __name__ == "__main__":
     for year in years:
         main(fpath, year)
     #"""
-
-    """
-    nohup ./generate_30min_rainfall_forcing_zero_pad.py 1995 1997  &
-    nohup ./generate_30min_rainfall_forcing_zero_pad.py 1998 2000  &
-    nohup ./generate_30min_rainfall_forcing_zero_pad.py 2001 2003  &
-    nohup ./generate_30min_rainfall_forcing_zero_pad.py 2004 2006  &
-    nohup ./generate_30min_rainfall_forcing_zero_pad.py 2007 2010  &
-    """
