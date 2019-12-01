@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 """
-Input forcing for CABLE is 3 hrly, generate 30 min rainfall inputs
+Input forcing for CABLE is 3 hrly, generate 30 min rainfall inputs. Here we're
+generating a long timeseries (x6) and filling new gaps with zeros, so that we
+have no change in rainfall timing or amount
 """
 __author__ = "Martin De Kauwe"
-__version__ = "1.0 (11.09.2019)"
+__version__ = "1.0 (02.12.2019)"
 __email__ = "mdekauwe@gmail.com"
 
 import os
