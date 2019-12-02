@@ -28,8 +28,11 @@ def main(fpath, year):
     dates = xr.DataArray(pd.date_range(start=f'1/1/{year} 00:00:00',
                          periods=ntime,freq="30min"),dims=['time'])
 
-    rain_test = rain.broadcast_like(dates)
-    rain_test = rain_test.fillna(0)
+    #rain_test = rain.broadcast_like(dates)
+    #rain_test = rain_test.fillna(0.0)
+    rain = rain.fillna(-1.0) #Precip shouldn't be negative
+    rain_test = rain.broadcast_like(dates).fillna(0.0)
+    rain_test = rain_test.where(rain_test > -1.0, -999.)
 
     enc = {'lat':{'_FillValue':False},
            'lon':{'_FillValue':False},
