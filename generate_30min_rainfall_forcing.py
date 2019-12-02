@@ -22,7 +22,7 @@ def main(fpath, year):
     ds = xr.open_dataset(fname)
     rain = ds.Rainf
     __, lat, lon = rain.shape
-    
+
     # Repeat rainfall data and then divide by increased number of timesteps so
     # to maintain the same rainfall total, but spread over 48 time slots. This
     # will mean smaller, more frequent events though
@@ -33,12 +33,12 @@ def main(fpath, year):
                           periods=len(new_rain),
                           freq="30min")
 
-
     # Create new 30 min rainfall data
     new_rain['time'] = dates
 
     mask = np.full(new_rain.shape, True)
     mask[::6, :, :] = False
+    mask[np.isnan]
     new_rain = np.where(mask == True, 0., new_rain)
 
     ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
@@ -51,7 +51,7 @@ def main(fpath, year):
 
     ds_out['time'] = dates
 
-    ds_out['Rainf'] = xr.DataArray(out, dims=['time', 'lat', 'lon'])
+    ds_out['Rainf'] = xr.DataArray(new_rain, dims=['time', 'lat', 'lon'])
     ds_out['Rainf'].attrs['units'] = 'kg m-2 s-1'
     ds_out['Rainf'].attrs['standard_name'] = "rainfall_flux"
     ds_out['Rainf'].attrs['long_name'] = "Rainfall rate"
@@ -75,7 +75,6 @@ def main(fpath, year):
     ds_out.lon.encoding['_FillValue'] = False
     ds_out.Rainf.encoding['_FillValue'] = False
     ds_out['Rainf'].attrs['_fillvalue'] = -999.0
-    ds_out.to_netcdf("test.nc")
 
     ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
     ds_out.to_netcdf(ofname)
