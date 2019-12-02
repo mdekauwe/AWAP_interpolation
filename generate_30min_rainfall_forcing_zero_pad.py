@@ -43,13 +43,14 @@ def main(fpath, year):
             six_count = 0
             cnt = 0
 
-            # Fill all time slices with missing value, otherwise values would
-            # have been changed to zero
+            # Fill all time slices with missing value, otherwise values
+            # would have been changed to zero
             if np.all(vals < -500.0):
                 out[:,r,c] = -999.0
 
             for t in range(time):
                 if six_count == 6:
+                    print(t, six_count, cnt)
                     out[t,r,c] = vals[cnt]
                     cnt += 1
                     six_count = 0
@@ -60,15 +61,40 @@ def main(fpath, year):
                           freq="30min")
 
     ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
-    ds_out['lat'] = rain['lat'].astype(np.float32)
-    ds_out['lon'] = rain['lon'].astype(np.float32)
+
+    lats = rain['lat'].values.astype(np.float64)
+    ds_out['lat'] = xr.DataArray(lats, dims=['lat'])
+
+    lons = rain['lon'].values.astype(np.float64)
+    ds_out['lon'] = xr.DataArray(lons, dims=['lon'])
+
     ds_out['time'] = dates
+
     ds_out['Rainf'] = xr.DataArray(out, dims=['time', 'lat', 'lon'])
     ds_out['Rainf'].attrs['units'] = 'kg m-2 s-1'
     ds_out['Rainf'].attrs['standard_name'] = "rainfall_flux"
     ds_out['Rainf'].attrs['long_name'] = "Rainfall rate"
-    ds_out['Rainf'].attrs['_fillvalue'] = -999.0
+
     ds_out['Rainf'].attrs['alma_name'] = "Rainf"
+
+    ds_out['time'].attrs['long_name'] = 'Time'
+    ds_out['time'].attrs['standard_name'] = "time"
+
+    ds_out['lon'].attrs['long_name'] = 'Longitude'
+    ds_out['lon'].attrs['standard_name'] = "longitude"
+    ds_out['lon'].attrs['axis'] = "X"
+    ds_out['lon'].attrs['units'] = "degrees_east"
+
+    ds_out['lat'].attrs['long_name'] = 'Latitude'
+    ds_out['lat'].attrs['standard_name'] = "latitude"
+    ds_out['lat'].attrs['axis'] = "Y"
+    ds_out['lat'].attrs['units'] = "degrees_north"
+
+    ds_out.lat.encoding['_FillValue'] = False
+    ds_out.lon.encoding['_FillValue'] = False
+    ds_out.Rainf.encoding['_FillValue'] = False
+    ds_out['Rainf'].attrs['_fillvalue'] = -999.0
+    ds_out.to_netcdf("test.nc")
 
     ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
     ds_out.to_netcdf(ofname)

@@ -36,37 +36,79 @@ def main(fpath, year):
     # Create new 30 min rainfall data
     new_rain['time'] = dates
 
-    # Repeat rainfall data and then divide by increased number of timesteps so
-    # to maintain the same rainfall total, but spread over 48 time slots. This
-    # will mean smaller, more frequent events though
-    # Need to keep areas that were NaN, i.e. sea, don't divde by these
-    new_rain = xr.where(np.logical_or(~np.isnan(new_rain), new_rain > 0.0),
-                        new_rain / 6.0,  new_rain)
+    mask = np.full(new_rain.shape, True)
+    mask[::6, :, :] = False
+    new_rain = np.where(mask == True, 0., new_rain)
 
+    ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
 
-    new_rain.attrs['units'] = 'kg m-2 s-1'
-    new_rain.attrs['standard_name'] = "rainfall_flux"
-    new_rain.attrs['long_name'] = "Rainfall rate"
+    lats = rain['lat'].values.astype(np.float64)
+    ds_out['lat'] = xr.DataArray(lats, dims=['lat'])
 
-    ofname = "awap_30min_rain/AWAP.Rainf.3hr.%d.nc" % (year)
-    new_rain.to_netcdf(ofname)
+    lons = rain['lon'].values.astype(np.float64)
+    ds_out['lon'] = xr.DataArray(lons, dims=['lon'])
+
+    ds_out['time'] = dates
+
+    ds_out['Rainf'] = xr.DataArray(out, dims=['time', 'lat', 'lon'])
+    ds_out['Rainf'].attrs['units'] = 'kg m-2 s-1'
+    ds_out['Rainf'].attrs['standard_name'] = "rainfall_flux"
+    ds_out['Rainf'].attrs['long_name'] = "Rainfall rate"
+
+    ds_out['Rainf'].attrs['alma_name'] = "Rainf"
+
+    ds_out['time'].attrs['long_name'] = 'Time'
+    ds_out['time'].attrs['standard_name'] = "time"
+
+    ds_out['lon'].attrs['long_name'] = 'Longitude'
+    ds_out['lon'].attrs['standard_name'] = "longitude"
+    ds_out['lon'].attrs['axis'] = "X"
+    ds_out['lon'].attrs['units'] = "degrees_east"
+
+    ds_out['lat'].attrs['long_name'] = 'Latitude'
+    ds_out['lat'].attrs['standard_name'] = "latitude"
+    ds_out['lat'].attrs['axis'] = "Y"
+    ds_out['lat'].attrs['units'] = "degrees_north"
+
+    ds_out.lat.encoding['_FillValue'] = False
+    ds_out.lon.encoding['_FillValue'] = False
+    ds_out.Rainf.encoding['_FillValue'] = False
+    ds_out['Rainf'].attrs['_fillvalue'] = -999.0
+    ds_out.to_netcdf("test.nc")
+
+    ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
+    ds_out.to_netcdf(ofname)
+
 
 if __name__ == "__main__":
 
     """
+    Run like this...
+
+    nohup ./generate_30min_rainfall_forcing.py 1995 1997 &
+    nohup ./generate_30min_rainfall_forcing.py 1998 2000 &
+    nohup ./generate_30min_rainfall_forcing.py 2001 2003 &
+    nohup ./generate_30min_rainfall_forcing.py 2004 2006 &
+    nohup ./generate_30min_rainfall_forcing.py 2007 2010 &
+    """
+
     # Expecting var to be supplied on cmd line, e.g.
-    # $ python generate_30min_rainfall_forcing.py 1995
+    # $ python generate_30min_rainfall_forcing_zero_pad.py 1995
     if len(sys.argv) < 2:
         raise TypeError("Expecting year name to be supplied on cmd line!")
 
-    year = int(sys.argv[1])
-    """
+    st_year = int(sys.argv[1])
+    en_year = int(sys.argv[2])
 
     fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
     #fpath = "../"
 
-    years = np.arange(1995, 2010+1)
-    #years = np.arange(1997, 2010+1)
+    #main(fpath, year)
+
+    #"""
+    #years = np.arange(1995, 2010+1)
+    years = np.arange(st_year, en_year+1)
 
     for year in years:
         main(fpath, year)
+    #"""
