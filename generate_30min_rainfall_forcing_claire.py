@@ -19,7 +19,8 @@ def main(fpath, year):
     print(year)
 
     fname = "%s/AWAP.Rainf.3hr.%d.nc" % (fpath, year)
-    ds = xr.open_dataset(fname)
+    ds = xr.open_dataset(fname, chunks={'time':1})
+    #ds = xr.open_dataset(fname)
     rain = ds.Rainf
     __, lat, lon = rain.shape
 
