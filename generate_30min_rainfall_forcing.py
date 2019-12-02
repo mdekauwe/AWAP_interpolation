@@ -21,7 +21,8 @@ def main(fpath, year):
     fname = "%s/AWAP.Rainf.3hr.%d.nc" % (fpath, year)
     ds = xr.open_dataset(fname)
     rain = ds.Rainf
-
+    __, lat, lon = rain.shape
+    
     # Repeat rainfall data and then divide by increased number of timesteps so
     # to maintain the same rainfall total, but spread over 48 time slots. This
     # will mean smaller, more frequent events though
