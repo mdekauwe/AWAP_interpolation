@@ -70,6 +70,8 @@ def main(fpath, year):
     ds_out['lat'].attrs['axis'] = "Y"
     ds_out['lat'].attrs['units'] = "degrees_north"
 
+    ds_out['time'].attrs['axis'] = 'T'
+
     ds_out.lat.encoding['_FillValue'] = False
     ds_out.lon.encoding['_FillValue'] = False
     ds_out.Rainf.encoding['_FillValue'] = False
