@@ -38,7 +38,6 @@ def main(fpath, year):
 
     mask = np.full(new_rain.shape, True)
     mask[::6, :, :] = False
-    mask[np.isnan]
     new_rain = np.where(mask == True, 0., new_rain)
 
     ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
