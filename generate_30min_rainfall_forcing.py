@@ -71,6 +71,7 @@ def main(fpath, year):
     ds_out['lat'].attrs['units'] = "degrees_north"
 
     ds_out['time'].attrs['axis'] = 'T'
+    ds_out['time'].attrs['units'] = "hours since 1995-01-01 00:00:00" ;
 
     ds_out.lat.encoding['_FillValue'] = False
     ds_out.lon.encoding['_FillValue'] = False
@@ -78,7 +79,7 @@ def main(fpath, year):
     ds_out['Rainf'].attrs['_fillvalue'] = -999.0
 
     ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
-    ds_out.to_netcdf(ofname)
+    ds_out.to_netcdf(ofname, unlimited_dims='time')
 
 
 if __name__ == "__main__":
