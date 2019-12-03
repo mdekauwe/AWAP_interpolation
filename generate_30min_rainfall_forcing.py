@@ -31,7 +31,7 @@ def main(fpath, year):
     # Generate new time sequence
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
                           periods=len(new_rain),
-                          freq="30min")
+                          freq="0.5H")
 
     # Create new 30 min rainfall data
     new_rain['time'] = dates
@@ -47,8 +47,6 @@ def main(fpath, year):
 
     lons = rain['lon'].values.astype(np.float64)
     ds_out['lon'] = xr.DataArray(lons, dims=['lon'])
-
-    #dates.encoding['units'] = 'hours since %s-01-01 00:00:00' % (str(year))
 
     ds_out['Rainf'] = xr.DataArray(new_rain, dims=['time', 'lat', 'lon'])
     ds_out['Rainf'].attrs['units'] = 'kg m-2 s-1'
