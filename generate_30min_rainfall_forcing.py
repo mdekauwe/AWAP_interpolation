@@ -48,6 +48,8 @@ def main(fpath, year):
     lons = rain['lon'].values.astype(np.float64)
     ds_out['lon'] = xr.DataArray(lons, dims=['lon'])
 
+
+
     ds_out['Rainf'] = xr.DataArray(new_rain, dims=['time', 'lat', 'lon'])
     ds_out['Rainf'].attrs['units'] = 'kg m-2 s-1'
     ds_out['Rainf'].attrs['standard_name'] = "rainfall_flux"
@@ -69,6 +71,8 @@ def main(fpath, year):
     ds_out['lat'].attrs['units'] = "degrees_north"
 
     ds_out['time'].attrs['axis'] = 'T'
+
+    ds_out['time'].encoding['units'] = 'hours since %s-01-01 00:00:00' % (str(year))
 
     ds_out.lat.encoding['_FillValue'] = False
     ds_out.lon.encoding['_FillValue'] = False
