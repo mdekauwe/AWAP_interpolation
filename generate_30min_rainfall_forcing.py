@@ -20,12 +20,12 @@ def main(fpath, year):
 
     fname = "%s/AWAP.Rainf.3hr.%d.nc" % (fpath, year)
     ds = xr.open_dataset(fname)
-    rain = ds.Rainf.values
+    rain = ds.Rainf
     __, lat, lon = rain.shape
 
     # Repeat rainfall data
-    new_rain = np.repeat(rain, 6, axis=0)
-    #new_rain = new_rain.astype(np.float32)
+    new_rain = np.repeat(rain.values, 6, axis=0)
+    new_rain = new_rain.astype(np.float32)
 
     # Generate new time sequence
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
