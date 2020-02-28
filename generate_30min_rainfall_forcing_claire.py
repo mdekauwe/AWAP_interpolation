@@ -63,12 +63,8 @@ if __name__ == "__main__":
     fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
     #fpath = "../"
 
-    #main(fpath, year)
-
-    #"""
-    #years = np.arange(1995, 2010+1)
     years = np.arange(st_year, en_year+1)
 
     for year in years:
         main(fpath, year)
-    #"""
+    
