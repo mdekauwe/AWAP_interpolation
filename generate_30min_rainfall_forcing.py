@@ -23,9 +23,7 @@ def main(fpath, year):
     rain = ds.Rainf
     __, lat, lon = rain.shape
 
-    # Repeat rainfall data and then divide by increased number of timesteps so
-    # to maintain the same rainfall total, but spread over 48 time slots. This
-    # will mean smaller, more frequent events though
+    # Repeat rainfall data
     new_rain = np.repeat(rain, 6, axis=0)
 
     # Generate new time sequence
@@ -36,9 +34,12 @@ def main(fpath, year):
     # Create new 30 min rainfall data
     new_rain['time'] = dates
 
-    mask = np.full(new_rain.shape, True)
-    mask[::6, :, :] = False
-    new_rain = np.where(mask == True, 0., new_rain)
+
+    # this was a mistake as it would remove all but one of the ppt repeats
+    # and we need them all otherwise we won't have enough rain
+    #mask = np.full(new_rain.shape, True)
+    #mask[::6, :, :] = False
+    #new_rain = np.where(mask == True, 0., new_rain)
 
     ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
 
