@@ -20,27 +20,17 @@ def main(fpath, year):
 
     fname = "%s/AWAP.Rainf.3hr.%d.nc" % (fpath, year)
     ds = xr.open_dataset(fname)
-    rain = ds.Rainf
+    rain = ds.Rainf.values
     __, lat, lon = rain.shape
 
     # Repeat rainfall data
     new_rain = np.repeat(rain, 6, axis=0)
+    new_rain = new_rain.astype(np.float32)
 
     # Generate new time sequence
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
                           periods=len(new_rain),
                           freq="0.5H")
-
-    # Create new 30 min rainfall data
-    new_rain['time'] = dates
-
-    new_rain = new_rain.astype(np.float32)
-    
-    # this was a mistake as it would remove all but one of the ppt repeats
-    # and we need them all otherwise we won't have enough rain
-    #mask = np.full(new_rain.shape, True)
-    #mask[::6, :, :] = False
-    #new_rain = np.where(mask == True, 0., new_rain)
 
     ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
 
