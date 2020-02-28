@@ -80,7 +80,8 @@ def main(fpath, year):
     ds_out['Rainf'].attrs['_fillvalue'] = -999.0
 
     ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
-    ds_out.to_netcdf(ofname)
+    #ds_out.to_netcdf(ofname)
+    ds_out.to_netcdf(ofname, format="NETCDF4")
 
 
 if __name__ == "__main__":
