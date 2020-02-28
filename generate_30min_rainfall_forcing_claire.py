@@ -20,7 +20,6 @@ def main(fpath, year):
 
     fname = "%s/AWAP.Rainf.3hr.%d.nc" % (fpath, year)
     ds = xr.open_dataset(fname, chunks={'time':1})
-    #ds = xr.open_dataset(fname)
     rain = ds.Rainf
     __, lat, lon = rain.shape
 
@@ -29,8 +28,6 @@ def main(fpath, year):
     dates = xr.DataArray(pd.date_range(start=f'1/1/{year} 00:00:00',
                          periods=ntime,freq="30min"),dims=['time'])
 
-    #rain_test = rain.broadcast_like(dates)
-    #rain_test = rain_test.fillna(0.0)
     rain = rain.fillna(-1.0) #Precip shouldn't be negative
     rain_test = rain.broadcast_like(dates).fillna(0.0)
     rain_test = rain_test.where(rain_test > -1.0, -999.)
