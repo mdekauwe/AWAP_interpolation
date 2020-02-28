@@ -23,8 +23,6 @@ def main(fpath, year):
     rain = ds.Rainf
     __, lat, lon = rain.shape
 
-    rain *= 6
-
     # Create a DataArray with the new times
     ntime = rain.sizes['time']*6 # 3hourly to 30 min.
     dates = xr.DataArray(pd.date_range(start=f'1/1/{year} 00:00:00',
