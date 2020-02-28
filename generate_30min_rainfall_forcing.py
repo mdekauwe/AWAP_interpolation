@@ -25,7 +25,7 @@ def main(fpath, year):
 
     # Repeat rainfall data
     new_rain = np.repeat(rain, 6, axis=0)
-    new_rain = new_rain.astype(np.float32)
+    #new_rain = new_rain.astype(np.float32)
 
     # Generate new time sequence
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
@@ -34,10 +34,10 @@ def main(fpath, year):
 
     ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
 
-    lats = rain['lat'].values.astype(np.float64)
+    lats = rain['lat'].values.astype(np.float32)
     ds_out['lat'] = xr.DataArray(lats, dims=['lat'])
 
-    lons = rain['lon'].values.astype(np.float64)
+    lons = rain['lon'].values.astype(np.float32)
     ds_out['lon'] = xr.DataArray(lons, dims=['lon'])
 
 
@@ -94,8 +94,8 @@ if __name__ == "__main__":
     st_year = int(sys.argv[1])
     en_year = int(sys.argv[2])
 
-    fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
-    #fpath = "../"
+    #fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
+    fpath = "../"
 
     #main(fpath, year)
 
