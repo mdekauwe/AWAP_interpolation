@@ -34,7 +34,8 @@ def main(fpath, year):
     # Create new 30 min rainfall data
     new_rain['time'] = dates
 
-
+    new_rain = new_rain.astype(np.float32)
+    
     # this was a mistake as it would remove all but one of the ppt repeats
     # and we need them all otherwise we won't have enough rain
     #mask = np.full(new_rain.shape, True)
@@ -82,7 +83,6 @@ def main(fpath, year):
 
     ofname = "awap_30min_rain_zero_pad/AWAP.Rainf.3hr.%d.nc" % (year)
     ds_out.to_netcdf(ofname)
-
 
 if __name__ == "__main__":
 
