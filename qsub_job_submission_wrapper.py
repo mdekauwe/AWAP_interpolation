@@ -22,13 +22,13 @@ def make_qsub_file(qsub_fname, var):
 #PBS -m ae
 #PBS -P w35
 #PBS -q normal
-#PBS -M mdekauwe@gmail.com
-#PBS -l mem=16GB
-#PBS -l ncpus=1
-#PBS -l walltime=03:00:00
-#PBS -l wd
+#PBS -l walltime=3:00:00
+#PBS -l mem=64GB
+#PBS -l ncpus=48
 #PBS -j oe
-#PBS -l other=gdata/w35+gdata/wd9
+#PBS -l wd
+#PBS -l storage=gdata/w35+gdata/wd9
+#PBS -M mdekauwe@gmail.com
 
 module load dot
 module load cdo
