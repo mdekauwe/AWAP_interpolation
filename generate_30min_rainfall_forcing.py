@@ -23,22 +23,14 @@ def main(fpath, year):
     rain = ds.Rainf
     __, lat, lon = rain.shape
 
-    # Repeat rainfall data and then divide by increased number of timesteps so
-    # to maintain the same rainfall total, but spread over 48 time slots. This
-    # will mean smaller, more frequent events though
-    new_rain = np.repeat(rain, 6, axis=0)
+    # Repeat rainfall data
+    new_rain = np.repeat(rain.values, 6, axis=0)
+    new_rain = new_rain.astype(np.float32)
 
     # Generate new time sequence
     dates = pd.date_range(start='1/1/%s 00:00:00' % (str(year)),
                           periods=len(new_rain),
                           freq="0.5H")
-
-    # Create new 30 min rainfall data
-    new_rain['time'] = dates
-
-    mask = np.full(new_rain.shape, True)
-    mask[::6, :, :] = False
-    new_rain = np.where(mask == True, 0., new_rain)
 
     ds_out = xr.Dataset(coords={'lon': lon, 'lat': lat, 'time': dates})
 
@@ -47,8 +39,6 @@ def main(fpath, year):
 
     lons = rain['lon'].values.astype(np.float64)
     ds_out['lon'] = xr.DataArray(lons, dims=['lon'])
-
-
 
     ds_out['Rainf'] = xr.DataArray(new_rain, dims=['time', 'lat', 'lon'])
     ds_out['Rainf'].attrs['units'] = 'kg m-2 s-1'
@@ -103,15 +93,13 @@ if __name__ == "__main__":
     st_year = int(sys.argv[1])
     en_year = int(sys.argv[2])
 
-    fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
+    #fpath = "/srv/ccrc/data25/z5218916/data/AWAP_to_netcdf/Rainf"
     #fpath = "../"
+    fpath = "/g/data/w35/Shared_data/AWAP_3h_v1/Rainf"
 
-    #main(fpath, year)
-
-    #"""
     #years = np.arange(1995, 2010+1)
     years = np.arange(st_year, en_year+1)
 
     for year in years:
         main(fpath, year)
-    #"""
+    
