@@ -142,14 +142,15 @@ def interpolate_forcing(fpath, var, output_dir, years=None):
 if __name__ == "__main__":
 
     #years = np.arange(1995, 2010+1)
-    years = np.arange(2011, 2018+1)
+    #years = np.arange(2011, 2018+1)
+    years = np.arange(2018, 2019+1)
     #years = np.arange(2000, 2001) # Test one year
 
     (sysname, nodename, release, version, machine) = os.uname()
     if "Mac" in nodename or "imac" in nodename:
         fpath = "/Users/mdekauwe/Desktop/AWAP"
     else:
-        fpath = "/short/w35/mm3972/data/AWAP_to_netcdf"
+        fpath = "/g/data/w35/Shared_data/AWAP_3h_v1"
 
     output_dir = "interpolated"
 

@@ -45,8 +45,7 @@ qsub_dir = "qsub_scripts"
 if not os.path.exists(qsub_dir):
     os.makedirs(qsub_dir)
 
-for var in ["LWdown", "PSurf", "SWdown", "Tair", "Qair", \
-            "Snowf", "Wind"]:
+for var in ["LWdown", "PSurf", "SWdown", "Tair", "Qair", "Wind"]:
 
     qsub_fn = "qsub_scripts/AWAP_interpolate_%s.sh" % (var)
     make_qsub_file(qsub_fn, var)
