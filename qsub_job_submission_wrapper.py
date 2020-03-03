@@ -28,9 +28,10 @@ def make_qsub_file(qsub_fname, var):
 #PBS -l walltime=03:00:00
 #PBS -l wd
 #PBS -j oe
-#PBS -l other=gdata1
+#PBS -l other=gdata/w35+gdata/wd9
 
 module load dot
+module load cdo
 source activate sci
 
 python ./interpolate_forcing_to_30min.py %s
